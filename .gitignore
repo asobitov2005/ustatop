@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.pyc
+*.pyo
+*.pyd
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+
+# Virtual environment
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# Mac
+.DS_Store
+
+# Env files
+.env
+.env.*
+
+# Static & Media (agar kerak bo'lmasa)
+staticfiles/
+media/
+
+
+
+# Pytest yoki boshqa test caching
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
