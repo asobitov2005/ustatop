@@ -38,3 +38,9 @@ media/
 .coverage
 htmlcov/
 .tox/
+
+
+#Pycharm
+.idea/*
+.idea
+*.xml
