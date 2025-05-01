@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, first_name, last_name, email, password, role='user'):
+    def create_user(self, first_name, last_name, email, password, role='client'):
         if not email:
             raise ValueError('Users emaili bo\'shi lo\'zim')
         if not first_name:
@@ -29,7 +29,6 @@ class CustomUserManager(BaseUserManager):
             password=password,
             role='admin'
         )
-        user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
@@ -40,21 +39,21 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser, PermissionsMixin):
     ROLE_SYSTEM = (
-        ('admin', 'Admin'),
-        ('staff', 'Staff'),
-        ('user', 'User'),
+        ('client', 'client'),
+        ('admin', 'admin'),
+        ('staff', 'staff'),
     )
 
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email = models.EmailField(max_length=55, unique=True, blank=False, null=False)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
     number = models.BigIntegerField(default=0)
     bio = models.TextField(max_length=500, blank=True)
-    role = models.CharField(max_length=20, choices=ROLE_SYSTEM, default='user')
+    role = models.CharField(max_length=20, choices=ROLE_SYSTEM, default='client')
+
+    groups = models.ManyToManyField('auth.Group', related_name='custom_user_get', blank=True)
+    user_permissions = models.ManyToManyField('auth.Permission', related_name='custom_user_get', blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
