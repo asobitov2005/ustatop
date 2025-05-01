@@ -5,7 +5,7 @@
 ### 1. Git orqali loyihani yuklab olish
 
 ```bash
-git clone https://github.com/your-username/ustatop.git
+git clone https://github.com/asobitov2005/ustatop.git
 cd ustatop
 ```
 
