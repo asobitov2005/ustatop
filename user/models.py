@@ -40,16 +40,12 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser, PermissionsMixin):
     ROLE_SYSTEM = (
         ('client', 'client'),
-        ('admin', 'admin'),
-        ('staff', 'staff'),
+        ('provider', 'provider')
     )
 
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    username = models.CharField(max_length=30)
     email = models.EmailField(max_length=55, unique=True, blank=False, null=False)
-    is_active = models.BooleanField(default=True)
-    number = models.BigIntegerField(default=0)
-    bio = models.TextField(max_length=500, blank=True)
+    password = models.CharField(max_length=50, blank=False, null=False)
     role = models.CharField(max_length=20, choices=ROLE_SYSTEM, default='client')
 
     groups = models.ManyToManyField('auth.Group', related_name='custom_user_get', blank=True)
