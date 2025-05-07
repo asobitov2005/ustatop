@@ -1,51 +1,46 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin, UserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, first_name, last_name, email, password, role='client'):
+
+    user_in_migration = True
+
+    def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('Users emaili bo\'shi lo\'zim')
-        if not first_name:
-            raise ValueError("Userni ismi bo'lisji lo'zim")
-        if not last_name:
-            raise ValueError("Userni familiyasi bo'lishi lo'zim")
-
-        user = self.model(
-            email=self.normalize_email(email),
-            first_name=first_name,
-            last_name=last_name,
-            role=role,
-        )
-        user.set_password(raw_password=password)
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, first_name, last_name, email, password):
-        user = self.create_user(
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            password=password,
-            role='admin'
-        )
-        user.is_staff = True
-        user.is_superuser = True
-        user.save(using=self._db)
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
 
-        return user
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(email, password, **extra_fields)
 
 
-
-class User(AbstractUser, PermissionsMixin):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     ROLE_SYSTEM = (
         ('client', 'client'),
-        ('provider', 'provider')
+        ('usta', 'usta'),
+        ('superuser', 'superuser'),
     )
 
-    username = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     email = models.EmailField(max_length=55, unique=True, blank=False, null=False)
-    password = models.CharField(max_length=50, blank=False, null=False)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
     role = models.CharField(max_length=20, choices=ROLE_SYSTEM, default='client')
 
     groups = models.ManyToManyField('auth.Group', related_name='custom_user_get', blank=True)
@@ -55,3 +50,6 @@ class User(AbstractUser, PermissionsMixin):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     objects = CustomUserManager()
+
+    def __str__(self):
+        return f"{self.email}, {self.role}"
