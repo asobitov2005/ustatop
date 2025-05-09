@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'django_filters',
     'location',
     'payment'
-
 ]
 
 MIDDLEWARE = [
@@ -116,6 +115,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=10),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
