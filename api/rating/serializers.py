@@ -1,5 +1,5 @@
 from rest_framework import serializers 
-from service.models import  Rating
+from service.models import Rating
 
 
 class RatingSerializer(serializers.ModelSerializer):
