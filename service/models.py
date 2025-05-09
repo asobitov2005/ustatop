@@ -36,8 +36,15 @@ class Booking(models.Model):
 
 
 class Rating(models.Model):
+    RATING_CHOICES = (
+            (1, '1 yulduz'),
+            (2, '2 yulduz'),
+            (3, '3 yulduz'),
+            (4, '4 yulduz'),
+            (5, '5 yulduz'),
+        )
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    rating = models.IntegerField()
+    rating = models.IntegerField(choices=RATING_CHOICES)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -29,3 +29,31 @@ class ServiceMixinAPIViewPk(mixins.ListModelMixin, mixins.CreateModelMixin,  mix
     
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+    
+
+
+    # class DetailCategoryView(APIView):
+    
+    # def get_object(self,pk):
+    #     category = get_object_or_404(Category, pk=pk)
+    #     return category
+
+
+    # def get(self,request, pk ):
+    #     category = self.get_object(pk)
+    #     serializer = CategorySerializer(category)
+    #     return Response(serializer.data)
+    
+    # def put(self, request, pk):
+    #     category = self.get_object(pk)
+    #     serializer = CategorySerializer(category, request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+        
+    # def delete(self, request, pk):
+    #     category = self.get_object(pk)
+    #     category.delete()
+    #     return Response({'data':'deleted'})
+    
+    

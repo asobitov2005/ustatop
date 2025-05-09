@@ -2,6 +2,10 @@ from .serializers import RatingSerializer
 from rest_framework.generics import GenericAPIView
 from rest_framework import mixins
 from service.models import Rating
+from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from .serializers import RatingSerializer
+from .filters import RatingFilter
 
 
 class RatingMixinAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
@@ -28,4 +32,10 @@ class RatingMixinAPIViewPk(mixins.ListModelMixin, mixins.CreateModelMixin,  mixi
     
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-    
+
+
+class RatingViewSet(viewsets.ReadOnlyModelViewSet):  
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = RatingFilter
