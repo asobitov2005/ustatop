@@ -7,5 +7,6 @@ urlpatterns = [
     path('rating/', include('api.rating.urls')),
     path('user/', include('api.user.urls')),
     path('address/', include('api.address.urls')),
-    path('city/', include('api.city.urls'))
+    path('city/', include('api.city.urls')),
+    path('payment/', include('api.payment.urls')),
 ]
