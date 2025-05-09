@@ -20,10 +20,10 @@ class Service(models.Model):
 
 class Booking(models.Model):
     STATUS_CHOICES = (
-        ('tolanmoqda', 'tolanmoqda'),
-        ('tolab bo\'ingan', 'tolab bo\'ingan'),
-        ('tugatilgan', 'tugatilgan'),
-        ('bekor qilingan', 'bekor qilingan'),
+        ('kutish', 'kutish'),
+        ('tasdiqlangan', 'tasdiqlangan'),
+        ('yakunlangan', 'yakunlangan'),
+        ('bekor qilindi', 'bekor qilindi')
     )
     client = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
