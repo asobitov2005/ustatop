@@ -34,7 +34,7 @@ class RatingMixinAPIViewPk(mixins.ListModelMixin, mixins.CreateModelMixin,  mixi
         return self.destroy(request, *args, **kwargs)
 
 
-class RatingViewSet(viewsets.ReadOnlyModelViewSet):  
+class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
     filter_backends = [DjangoFilterBackend]
