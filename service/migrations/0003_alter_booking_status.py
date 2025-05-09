@@ -1,0 +1,16 @@
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('service', '0002_alter_rating_rating'),
+    ]
+
+    operations = [
+        migrations.AlterField(
+            model_name='booking',
+            name='status',
+            field=models.CharField(choices=[('kutish', 'kutish'), ('tasdiqlangan', 'tasdiqlangan'), ('yakunlangan', 'yakunlangan'), ('bekor qilindi', 'bekor qilindi')], max_length=20),
+        ),
+    ]

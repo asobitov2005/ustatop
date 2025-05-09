@@ -42,6 +42,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     role = models.CharField(max_length=20, choices=ROLE_SYSTEM, default='client')
+    date_joined = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(auto_now=True)
 
     groups = models.ManyToManyField('auth.Group', related_name='custom_user_get', blank=True)
     user_permissions = models.ManyToManyField('auth.Permission', related_name='custom_user_get', blank=True)
