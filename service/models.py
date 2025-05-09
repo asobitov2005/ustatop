@@ -43,6 +43,7 @@ class Rating(models.Model):
             (4, '4 yulduz'),
             (5, '5 yulduz'),
         )
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     rating = models.IntegerField(choices=RATING_CHOICES)
     comment = models.TextField()
