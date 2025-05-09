@@ -12,7 +12,6 @@ class City(models.Model):
 
 class Address(models.Model):
     street_name = models.CharField(max_length=100)
-
     booking_address = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
 

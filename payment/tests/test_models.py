@@ -23,3 +23,4 @@ class PaymentModelTest(TestCase):
         self.assertEqual(payment.status, "pending")
         self.assertEqual(payment.payment_method, "cash")
         self.assertEqual(payment.amount, 40)
+
