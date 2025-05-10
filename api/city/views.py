@@ -8,13 +8,35 @@ from rest_framework import mixins
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from api.permissions import IsAdmin, IsUsta, IsClient
+from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 
-class CityAPIViewMixin(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
-    permission_classes = [IsAuthenticated, ]
-    queryset = City.objects.all()
+
+class OnlyUser(mixins.ListModelMixin, GenericAPIView):
+    permission_classes = (IsClient,)
     serializer_class = CitySerializer
+    queryset = City.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class OnlyUserPk(mixins.RetrieveModelMixin, GenericAPIView):
+    permission_classes = (IsClient,)
+    serializer_class = CitySerializer
+    queryset = City.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+class OnlyUsta(mixins.ListModelMixin, mixins.CreateModelMixin ,GenericAPIView):
+    permission_classes = (IsClient,)
+    serializer_class = CitySerializer
+    queryset = City.objects.all()
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -22,17 +44,18 @@ class CityAPIViewMixin(GenericAPIView, mixins.ListModelMixin, mixins.CreateModel
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-class CityDetailAPIViewMixin(GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
-    permission_classes = [IsAuthenticated, ]
-    queryset = City.objects.all()
+class OnlyUstaPk(mixins.RetrieveModelMixin, GenericAPIView):
+    permission_classes = (IsUsta,)
     serializer_class = CitySerializer
-    lookup_field = 'pk'
+    queryset = City.objects.all()
 
     def get(self, request, *args, **kwargs):
-        return self.retrieve(request,*args, **kwargs)
+        return self.retrieve(request, *args, **kwargs)
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+
+class AdminViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdmin,]
+    queryset = City.objects.all()
+    serializer_class = CitySerializer
+    filter_backends = [DjangoFilterBackend]

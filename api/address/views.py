@@ -8,13 +8,34 @@ from rest_framework import mixins
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
+from api.permissions import  IsUsta, IsAdmin, IsClient
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 
-class AddressAPIViewMixin(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
-    permission_classes = [IsAuthenticated, ]
-    queryset = Address.objects.all()
+class OnlyUser(mixins.ListModelMixin, GenericAPIView):
+    permission_classes = (IsClient,)
     serializer_class = AddressSerializer
+    queryset = Address.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class OnlyUserPk(mixins.RetrieveModelMixin, GenericAPIView):
+    permission_classes = (IsClient,)
+    serializer_class = AddressSerializer
+    queryset = Address.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+class OnlyUsta(mixins.ListModelMixin, mixins.CreateModelMixin ,GenericAPIView):
+    permission_classes = (IsClient,)
+    serializer_class = AddressSerializer
+    queryset = Address.objects.all()
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -22,17 +43,18 @@ class AddressAPIViewMixin(GenericAPIView, mixins.ListModelMixin, mixins.CreateMo
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-class AddressDetailAPIViewMixin(GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
-    permission_classes = [IsAuthenticated, ]
-    queryset = Address.objects.all()
+class OnlyUstaPk(mixins.RetrieveModelMixin, GenericAPIView):
+    permission_classes = (IsUsta,)
     serializer_class = AddressSerializer
-    lookup_field = 'pk'
+    queryset = Address.objects.all()
 
     def get(self, request, *args, **kwargs):
-        return self.retrieve(request,*args, **kwargs)
+        return self.retrieve(request, *args, **kwargs)
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+
+class AdminViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdmin,]
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    filter_backends = [DjangoFilterBackend]

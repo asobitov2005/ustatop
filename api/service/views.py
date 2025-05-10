@@ -1,59 +1,90 @@
+from grappelli.templatetags.grp_tags import User
 from .serializers import ServiceSerializer
 from rest_framework.generics import GenericAPIView
 from rest_framework import mixins
 from service.models import Service
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from api.permissions import IsAdmin, IsClient, IsUsta
 
 
 
-class ServiceMixinAPIView(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
+
+
+class OnlyAdmin(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
+    permission_classes = (IsAdmin, )
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-    
+
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)   
+        return self.create(request, *args, **kwargs)
 
 
-class ServiceMixinAPIViewPk(mixins.ListModelMixin, mixins.CreateModelMixin,  mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, GenericAPIView):
+
+
+class OnlyAdminPk(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin ,GenericAPIView):
+    permission_classes = (IsAdmin,)
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class OnlyUser(mixins.ListModelMixin, GenericAPIView):
+    permission_classes = (IsClient,)
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class OnlyUserPk(mixins.RetrieveModelMixin, GenericAPIView):
+    permission_classes = (IsClient,)
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-    
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-    
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+
+
+
+class OnlyUsta(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
+    permission_classes = (IsUsta, )
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class OnlyUstaPk(mixins.RetrieveModelMixin, GenericAPIView):
+    permission_classes = (IsUsta, )
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+
+
+
     
 
 
-    # class DetailCategoryView(APIView):
-    
-    # def get_object(self,pk):
-    #     category = get_object_or_404(Category, pk=pk)
-    #     return category
 
-
-    # def get(self,request, pk ):
-    #     category = self.get_object(pk)
-    #     serializer = CategorySerializer(category)
-    #     return Response(serializer.data)
-    
-    # def put(self, request, pk):
-    #     category = self.get_object(pk)
-    #     serializer = CategorySerializer(category, request.data, partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-        
-    # def delete(self, request, pk):
-    #     category = self.get_object(pk)
-    #     category.delete()
-    #     return Response({'data':'deleted'})
     
     

@@ -1,13 +1,16 @@
 from django.urls import path, include
-from .views import CityAPIViewMixin, CityDetailAPIViewMixin
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from .views import OnlyUser, OnlyUserPk, OnlyUsta, OnlyUstaPk, AdminViewSet
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register(r'', AdminViewSet)
 
 urlpatterns = [
-    path('', CityAPIViewMixin.as_view()),
-    path('<int:pk>/', CityDetailAPIViewMixin.as_view()),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('client/', OnlyUser.as_view(), name='clien'),
+    path('client/<int:pk>/', OnlyUserPk.as_view(), name='clienPk'),
+
+    path('usta/', OnlyUsta.as_view(), name='usta'),
+    path('usta/<int:pk>', OnlyUstaPk.as_view(), name='ustaPk'),
+
+
+    path('admins/', include(router.urls), name='admin'),
 ]

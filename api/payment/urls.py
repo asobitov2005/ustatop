@@ -1,13 +1,17 @@
 from django.urls import path, include
-from .views import PaymentAPIViewMixin, PaymentDetailAPIViewMixin
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from .views import OnlyUsta, OnlyUstaPk, OnlyUser, OnlyUserPk, OnlyAdmin
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'', OnlyAdmin)
 
 urlpatterns = [
-    path('', PaymentAPIViewMixin.as_view()),
-    path('<int:pk>/', PaymentDetailAPIViewMixin.as_view()),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('client/', OnlyUser.as_view()),
+    path('client/<int:pk>/', OnlyUserPk.as_view()),
+
+    path('usta/', OnlyUsta.as_view()),
+    path('usta/<int:pk>/', OnlyUstaPk.as_view()),
+
+    path('admins/', include(router.urls)),
+
 ]
