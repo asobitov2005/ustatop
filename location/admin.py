@@ -15,5 +15,6 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 
+
 admin.site.register(City, CityAdmin)
 admin.site.register(Address, AddressAdmin)

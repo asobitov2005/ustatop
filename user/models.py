@@ -8,7 +8,7 @@ class CustomUserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('Users emaili bo\'shi lo\'zim')
+            raise ValueError('Users emaili bo\'lishi lo\'zim')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -41,7 +41,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
-    role = models.CharField(max_length=20, choices=ROLE_SYSTEM, default='client')
+    role = models.CharField(max_length=20, choices=ROLE_SYSTEM)
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
 
