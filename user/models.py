@@ -32,7 +32,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     ROLE_SYSTEM = (
         ('client', 'client'),
         ('usta', 'usta'),
-        ('superuser', 'superuser'),
+        ('admin', 'admin'),
     )
 
     first_name = models.CharField(max_length=30)
